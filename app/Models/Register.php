@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Role extends Model
+class Register extends Model
 {
     use Notifiable;
 
@@ -15,8 +15,11 @@ class Role extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        "role_Name",
-        "description"
+        "body" ,
+        "user_id" ,
+        "activity_id" ,
+        "status",
     ];
-    protected $table = 'role';
+    protected $table = 'register';
+
 }
