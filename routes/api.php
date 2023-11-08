@@ -21,6 +21,4 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [UserController::class,'Register']);
     Route::post('login', [UserController::class,'login']);
 });
-Route::middleware('auth')->get("/hello",function(){
-    return "hello";
-});
+Route::get("/hello",[Demo::class,"Hello"]);

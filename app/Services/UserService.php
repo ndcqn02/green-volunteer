@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\User_Role;
-use Illuminate\Support\Facades\Auth;
+use GuzzleHttp\Psr7\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 
-class UserService
+class UserService 
 {
     public function Register($data)
     {
@@ -39,7 +40,7 @@ class UserService
             return response()->json([
                 "message" => 'đăng kí tài khoản thành công',
                 "data" => $new_user,
-                "status" => 200
+                "error" => false
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -47,24 +48,28 @@ class UserService
                 [
                     "message" => 'đăng kí tài khoản thất bại',
                     "data" => null,
-                    "status" => 400
+                    "error" => true
                 ]
             );
         }
     }
     public function login ($data){
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+        $token = JWTAuth::attempt(['email' => $data['email'], 'password' => $data['password']]);
+        if ($token) {
             return response()->json([
                 "message" => 'login success',
-                "data" => $data,
-                "status" => 200
+                "data" => [
+                    "user"=>$data,
+                    "token"=>$token
+                ],
+                "error" => false
             ]);
         }
         else{
             return response()->json([
                 "message" => "email or password is incorrect",
                 "data" => null,
-                "status" => 400
+                "error" => true
             ]);
         }
     }

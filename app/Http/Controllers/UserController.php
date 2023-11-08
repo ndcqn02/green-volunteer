@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserValidationRequest;
 use App\Services\UserService;
+use GuzzleHttp\Psr7\Request;
 
 class UserController extends Controller
 {
