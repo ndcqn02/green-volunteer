@@ -9,11 +9,12 @@ use GuzzleHttp\Psr7\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 
-class UserService 
+class UserService
 {
-    public function Register($data)
+    public function register($data)
     {
         $email = $data['email'];
+        $phone = $data['phone'];
         $password = bcrypt($data['password']);
         $listRole = Role::whereIn('role_Name', $data['role'])->get();
         $checkUser = User::where('email', "$email")->exists();
@@ -28,6 +29,7 @@ class UserService
             DB::beginTransaction();
             $new_user = User::create([
                 'email' => $email,
+                "phone" => $phone,
                 'password' => $password,
             ]);
             foreach ($listRole as $key => $value) {
@@ -53,21 +55,45 @@ class UserService
             );
         }
     }
-    public function login ($data){
+    public function login($data)
+    {
         $token = JWTAuth::attempt(['email' => $data['email'], 'password' => $data['password']]);
         if ($token) {
             return response()->json([
                 "message" => 'login success',
                 "data" => [
-                    "user"=>$data,
-                    "token"=>$token
+                    "user" => $data,
+                    "token" => $token
                 ],
                 "error" => false
             ]);
-        }
-        else{
+        } else {
             return response()->json([
                 "message" => "email or password is incorrect",
+                "data" => null,
+                "error" => true
+            ]);
+        }
+    }
+    public function updateUser($data)
+    {       
+        try {
+            $update= User::find($data['id'])->update([
+                "username" => $data['username'],
+                "email" => $data['email'],
+                "fullName" => $data["fullName"],
+                "phone" => $data["phone"],
+                "DOB" => $data['DOB'],
+                "school" => $data['school'],
+            ]);
+            return response()->json([
+                "message" => "update profile success",
+                "data" => $update,
+                "error" => false
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "update user faild",
                 "data" => null,
                 "error" => true
             ]);
