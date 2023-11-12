@@ -21,6 +21,15 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [UserController::class,'Register']);
     Route::post('login', [UserController::class,'login']);
 });
+
+Route::prefix('activities')->group(function () {
+    Route::post('/', [ActivityController::class,'create']);
+    Route::put('/', [ActivityController::class,'update']);
+    Route::delete('/{id}', [ActivityController::class,'delete']);
+    Route::get('/',[ActivityController::class,'index']);
+    Route::get('/{id}', [ActivityController::class,'show']);
+});
+
 Route::middleware('auth')->get("/hello",function(){
     return "hello";
 });
