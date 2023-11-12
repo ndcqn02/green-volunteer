@@ -25,3 +25,11 @@ Route::prefix('auth')->group(function () {
 Route::prefix('user')->group(function () {
     Route::put("/updateUser",[UserController::class,"updateUser"]);
 });
+
+Route::prefix('activities')->group(function () {
+    Route::post('/', [ActivityController::class,'create']);
+    Route::put('/', [ActivityController::class,'update']);
+    Route::delete('/{id}', [ActivityController::class,'delete']);
+    Route::get('/',[ActivityController::class,'index']);
+    Route::get('/{id}', [ActivityController::class,'show']);
+});
