@@ -34,7 +34,14 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
     ];
-
+    public function role()
+    {
+        return $this->hasOne(User_Role::class,'users_id');
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,User_Role::class,'users_id','role_id');
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();

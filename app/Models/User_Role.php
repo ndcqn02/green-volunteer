@@ -16,10 +16,4 @@ class User_Role extends Model
         "role_id",
     ];
     public $timestamps = false;
-    public function User ():HasOne{
-        return $this->hasOne(User::class);
-    }
-    public function Role ():HasOne{
-        return $this->hasOne(Role::class);
-    }
 }

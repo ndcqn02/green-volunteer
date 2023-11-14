@@ -19,4 +19,9 @@ class Role extends Model
         "description"
     ];
     protected $table = 'role';
+
+    public function admin()
+    {
+        return $this->belongsToMany(User::class, User_Role::class, 'role_id', 'user_id');
+    }
 }

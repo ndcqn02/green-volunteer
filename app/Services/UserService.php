@@ -5,25 +5,23 @@ namespace App\Services;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\User_Role;
-use GuzzleHttp\Psr7\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 
 class UserService
 {
+    public function checkUserByEmail($email){
+        return User::where('email', "$email")->first();
+    }
     public function register($data)
     {
         $email = $data['email'];
         $phone = $data['phone'];
         $password = bcrypt($data['password']);
         $listRole = Role::whereIn('role_Name', $data['role'])->get();
-        $checkUser = User::where('email', "$email")->exists();
+        $checkUser = $this->checkUserByEmail($email);
         if ($checkUser) {
-            return response()->json([
-                "message" => 'email đã tồn tại',
-                "data" => null,
-                "status" => 400
-            ]);
+            return null;
         }
         try {
             DB::beginTransaction();
@@ -34,45 +32,31 @@ class UserService
             ]);
             foreach ($listRole as $key => $value) {
                 User_Role::create([
-                    "user_id" => $new_user->id,
+                    "users_id" => $new_user->id,
                     "role_id" => $value->id
                 ]);
             }
             DB::commit();
-            return response()->json([
-                "message" => 'đăng kí tài khoản thành công',
-                "data" => $new_user,
-                "error" => false
-            ]);
+            return $new_user;
         } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json(
-                [
-                    "message" => 'đăng kí tài khoản thất bại',
-                    "data" => null,
-                    "error" => true
-                ]
-            );
+            return $data= "demo";
         }
     }
     public function login($data)
     {
-        $token = JWTAuth::attempt(['email' => $data['email'], 'password' => $data['password']]);
-        if ($token) {
-            return response()->json([
-                "message" => 'login success',
-                "data" => [
-                    "user" => $data,
-                    "token" => $token
-                ],
-                "error" => false
-            ]);
+        
+        if (auth()->attempt(['email' => $data['email'], 'password' => $data['password']])) {
+            $customClaims = [
+                'user_id' => auth()->user()->id,
+            ];
+            $token = JWTAuth::claims($customClaims)->fromUser(auth()->user());
+            return [
+                "user" => $data,
+                "token" => $token
+            ];
         } else {
-            return response()->json([
-                "message" => "email or password is incorrect",
-                "data" => null,
-                "error" => true
-            ]);
+            return null;
         }
     }
     public function updateUser($data)
@@ -86,17 +70,9 @@ class UserService
                 "DOB" => $data['DOB'],
                 "school" => $data['school'],
             ]);
-            return response()->json([
-                "message" => "update profile success",
-                "data" => $update,
-                "error" => false
-            ]);
+            return $update;
         } catch (\Throwable $th) {
-            return response()->json([
-                "message" => "update user faild",
-                "data" => null,
-                "error" => true
-            ]);
+            return null;
         }
     }
 }
