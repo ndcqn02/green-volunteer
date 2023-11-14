@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use app\Http\Controllers\Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,11 @@ Route::prefix('activities')->group(function () {
     Route::delete('/{id}', [ActivityController::class,'delete']);
     Route::get('/',[ActivityController::class,'index']);
     Route::get('/{id}', [ActivityController::class,'show']);
+});
+Route::prefix('posts')->group(function () {
+    Route::post('/', [PostController::class,'create']);
+    Route::put('/{id}', [PostController::class,'update']);
+    Route::delete('/{id}', [PostController::class,'delete']);
+    Route::get('/',[PostController::class,'index']);
+    Route::get('/{id}', [PostController::class,'show']);
 });
