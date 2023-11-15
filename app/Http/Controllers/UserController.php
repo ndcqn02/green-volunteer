@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Requests\AuthValidationRequest;
+use App\Http\Requests\RegisterValidationRequest;
 use App\Http\Requests\UserValidationRequest;
 use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -13,15 +16,26 @@ class UserController extends Controller
     public function __construct() {
         $this->service = new UserService();
     }
-    public function register(AuthValidationRequest $authValidator){
-        $authValidator->validated();
-        return  $this->service->register($authValidator->input());
+    public function register(RegisterValidationRequest $registerValidator){
+        $response =  $this->service->register($registerValidator->input());
+        if($response)
+            return ResponseHelper::jsonResponse(200, "success", $response, false);
+        else
+            return ResponseHelper::jsonResponse(400, "failed", null, true);
     }
     public function login(AuthValidationRequest $authValidator){
         $authValidator->validated();
-        return  $this->service->login($authValidator->input());
+        $response= $this->service->login($authValidator->input());
+        if($response)
+            return ResponseHelper::jsonResponse(200, "success", $response, false);
+        else
+            return ResponseHelper::jsonResponse(400, "failed", null, true);
     }
     public function updateUser(UserValidationRequest $userValidator){
-        return  $this->service->updateUser($userValidator->input());
+        $response=$this->service->updateUser($userValidator->input());
+        if($response)
+            return ResponseHelper::jsonResponse(200, "success", $response, false);
+        else
+            return ResponseHelper::jsonResponse(400, "failed", null, true);
     }
 }
