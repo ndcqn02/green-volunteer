@@ -10,23 +10,28 @@ use Illuminate\Support\Facades\Validator;
 use App\Helpers\ResponseHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use LDAP\Result;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostsService
 {
-    public function getAllPosts()
-    {
-    if(Post::all()->count() != 0)
-    {
-        return Post::all();
-    }
-    return false;
-}
 
+
+    public function getAllPosts($page = 1, $pageSize = 10, $status = null)
+    {
+        $query = Post::query();
+
+        if ($status !== null) {
+            $query->where('status', $status);
+        }
+
+        return $query->paginate($pageSize, ['*'], 'page', $page);
+
+    }
     public function getPostById($postId)
     {
-        $Id = Post::find($postId);
-        if($Id){
-            return $Id;
+        $post = Post::find($postId);
+        if($post){
+            return $post;
         }
         return false;
     }

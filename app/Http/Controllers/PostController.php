@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\PostsService;
 use App\Helpers\ResponseHelper;
+use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostResource;
+use Illuminate\Http\JsonResponse;
+
 
 
 
@@ -18,14 +22,15 @@ class PostController extends Controller
         $this->postsService = $postsService;
     }
 
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $posts = $this->postsService->getAllPosts();
-        if ($posts) {
-            return ResponseHelper::jsonResponse(200, 'All Posts Show', $posts);
-        }
-    }
+        $page = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 10);
+        $filters = $request->input('status');
+        $posts = $this->postsService->getAllPosts($page, $pageSize, $filters);
+        return ResponseHelper::jsonResponse(200, 'All Posts Show', $posts);
 
+    }
     public function show($id)
     {
         $post = $this->postsService->getPostById($id);
@@ -37,32 +42,17 @@ class PostController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create(PostsService $postsService)
     {
-        $data = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'user_id' => 'required',
-            'status' => 'required|max:255',
-            'images' => 'nullable|max:255',
-        ]);
-
-        $post = $this->postsService->createPost($data);
+        $post = $this->postsService->createPost($postsService);
         return ResponseHelper::jsonResponse(200, 'New Post Show', $post);
 
 
     }
-    public function update(Request $request, $id)
+    public function update(PostsService $postsService, $id)
     {
-        $data = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'user_id' => 'required',
-            'status' => 'required|max:255',
-            'images' => 'nullable|max:255',
-        ]);
 
-        $result = $this->postsService->updatePost($id, $data);
+        $result = $this->postsService->updatePost($id, $postsService);
         if ($result) {
             return ResponseHelper::jsonResponse(200, 'PostUpdate Succesfully', $result);
         }
