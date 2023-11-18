@@ -23,7 +23,6 @@ class PostsService
         if ($status !== null) {
             $query->where('status', $status);
         }
-
         return $query->paginate($pageSize, ['*'], 'page', $page);
 
     }

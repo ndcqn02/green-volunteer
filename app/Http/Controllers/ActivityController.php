@@ -17,12 +17,6 @@ class ActivityController extends Controller
     {
         $this->activityService = new ActivityService();
     }
-
-    // public function index()
-    // {
-    //     $activity = $this->activityService->getAll();
-    //     return ResponseHelper::jsonResponse(200, 'OK', $activity);
-    // }
     public function index(Request $request): JsonResponse
     {
         $page = $request->input('page', 1);

@@ -24,7 +24,6 @@ class ActivityService
             $result = $activity->update($activityData -> all());
             return $result;
         }
-
         return false;
     }
 
@@ -45,9 +44,7 @@ class ActivityService
         if ($status !== null) {
             $query->where('status', $status);
         }
-
         return $query->paginate($pageSize, ['*'], 'page', $page);
-
     }
 
     public function getOne ($id){

@@ -32,7 +32,6 @@ class FormsController extends Controller
             return ResponseHelper::jsonResponse(200, 'Form index ID Show', $form);
         }
         return ResponseHelper::jsonResponse(200, 'Data Not Found', $form);
-
     }
     public function create(FormsRequest $request)
     {
@@ -52,8 +51,8 @@ class FormsController extends Controller
             return ResponseHelper::jsonResponse(200, 'New Form Update Succesfully', $activity);
         }
         return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
-
     }
+
     public function delete($id)
     {
         $result = $this->formService->softDeleteForm($id);

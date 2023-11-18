@@ -27,9 +27,9 @@ class FormService
 
     public function getformById($formId)
     {
-        $Id = form::find($formId);
-        if($Id){
-            return $Id;
+        $form = form::find($formId);
+        if($form){
+            return $form;
         }
         return false;
     }
@@ -48,7 +48,6 @@ class FormService
             $result = $form->update($data -> all());
             return $result;
         }
-
         return false;
     }
 
