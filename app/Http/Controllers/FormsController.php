@@ -10,7 +10,7 @@ use App\Http\Requests\FormsRequest;
 use Illuminate\Http\JsonResponse;
 
 
-class FormController extends Controller
+class FormsController extends Controller
 {
     protected $formService;
     public function __construct(FormService $formService){
@@ -21,8 +21,8 @@ class FormController extends Controller
         $page = $request->input('page', 1);
         $pageSize = $request->input('pageSize', 10);
         $filters = $request->input('status');
-        $posts = $this->formService->getAllforms($page, $pageSize, $filters);
-        return ResponseHelper::jsonResponse(200, 'All Posts Show', $posts);
+        $forms = $this->formService->getAllforms($page, $pageSize, $filters);
+        return ResponseHelper::jsonResponse(200, 'All Forms Show', $forms);
 
     }
     public function show($Id)
@@ -36,26 +36,27 @@ class FormController extends Controller
     }
     public function create(FormsRequest $request)
     {
-
-
-        $post = $this->formService->createform($request);
-        return ResponseHelper::jsonResponse(200, 'New Form Show', $post);
+        $form = $this->formService->createForm($request);
+        if ($form) {
+            return ResponseHelper::jsonResponse(200, 'New Form Create Succesfully', $form);
+        }
+        return ResponseHelper::jsonResponse('Bad Request', $form, 400);
 
     }
-    public function update(FormsRequest $request, $formId)
+    public function update(FormsRequest $formRequest)
     {
+        $checkExist = $this->formService->getformById($formRequest->id);
 
-
-        $post = $this->formService->updateform($formId,$request);
-        if ($post) {
-            return ResponseHelper::jsonResponse(200, 'Form Update Succesfully', $post);
+        if ($checkExist) {
+            $activity = $this->formService->updateForm($formRequest);
+            return ResponseHelper::jsonResponse(200, 'New Form Update Succesfully', $activity);
         }
-        return ResponseHelper::jsonResponse(404, 'Post Not Found', null, null);
+        return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
 
     }
     public function delete($id)
     {
-        $result = $this->formService->softDeleteform($id);
+        $result = $this->formService->softDeleteForm($id);
         if ($result) {
             return ResponseHelper::jsonResponse(200,'Delete Form Succesfully', $result);
         }

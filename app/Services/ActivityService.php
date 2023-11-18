@@ -22,7 +22,6 @@ class ActivityService
 
         if ($activity) {
             $result = $activity->update($activityData -> all());
-            // dd($result);
             return $result;
         }
 
@@ -39,10 +38,6 @@ class ActivityService
         return;
     }
 
-    // public function getAll (){
-    //     $result = Activity::all();
-    //     return $result;
-    // }
     public function getAll($page = 1, $pageSize = 10, $status = null)
     {
         $query = Activity::query();

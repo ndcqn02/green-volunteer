@@ -38,16 +38,19 @@ class PostsService
 
     public function createPost($data)
     {
-        return Post::create($data);
+        $result = Post::create($data ->all());
+        return $result;
     }
 
-    public function updatePost($postId, $data)
+    public function updatePost($data)
     {
-        $post = Post::find($postId);
+        $post = Post::findOrFail($data['id']);
 
         if ($post) {
-            return $post->update($data);;
+            $result = $post->update($data -> all());
+            return $result;
         }
+
         return false;
     }
 

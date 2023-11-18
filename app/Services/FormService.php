@@ -34,22 +34,25 @@ class FormService
         return false;
     }
 
-    public function createform($data)
+    public function createForm($data)
     {
-        return form::create($data);
+        $result = form::create($data ->all());
+        return $result;
     }
 
-    public function updateform($formId, $data)
+    public function updateForm($data)
     {
-        $form = form::find($formId);
+        $form = form::findOrFail($data['id']);
 
         if ($form) {
-            return $form->update($data);;
+            $result = $form->update($data -> all());
+            return $result;
         }
+
         return false;
     }
 
-    public function softDeleteform($formId)
+    public function softDeleteForm($formId)
     {
         $form = form::find($formId);
 

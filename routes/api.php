@@ -36,19 +36,20 @@ Route::prefix('activities')->group(function () {
     Route::get('getId/{id}', [ActivityController::class,'show']);
 });
 Route::prefix('posts')->group(function () {
+    Route::get('/',[PostController::class,'index']);
     Route::get('/{status}', [PostController::class,'index']);
     Route::get('getId/{id}', [PostController::class,'show']);
     Route::post('/', [PostController::class,'create']);
-    Route::put('/{id}', [PostController::class,'update']);
+    Route::put('/', [PostController::class,'update']);
     Route::delete('/{id}', [PostController::class,'delete']);
 
 });
-Route::prefix('form')->group(function () {
-    Route::get('/',[FormController::class,'index']);
-    Route::get('/{status}', [FormController::class,'index']);
-    Route::get('getId/{id}', [FormController::class,'show']);
-    Route::post('/', [FormController::class,'create']);
-    Route::put('/{id}', [FormController::class,'update']);
-    Route::delete('/{id}', [FormController::class,'delete']);
+Route::prefix('forms')->group(function () {
+    Route::get('/',[FormsController::class,'index']);
+    Route::get('/{status}', [FormsController::class,'index']);
+    Route::get('getId/{id}', [FormsController::class,'show']);
+    Route::post('/', [FormsController::class,'create']);
+    Route::put('/', [FormsController::class,'update']);
+    Route::delete('/{id}', [FormsController::class,'delete']);
 
 });

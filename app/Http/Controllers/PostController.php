@@ -42,21 +42,25 @@ class PostController extends Controller
     }
 
 
-    public function create(PostsService $postsService)
+    public function create(PostRequest $postRequest)
     {
-        $post = $this->postsService->createPost($postsService);
-        return ResponseHelper::jsonResponse(200, 'New Post Show', $post);
+        $post = $this->postsService->createPost($postRequest);
+        if ($post) {
+            return ResponseHelper::jsonResponse(200, 'OK', $post);
+        }
+        return ResponseHelper::jsonResponse('Bad Request', $post, 400);
 
 
     }
-    public function update(PostsService $postsService, $id)
+    public function update(PostRequest $postRequest)
     {
+        $checkExist = $this->postsService->getPostById($postRequest->id);
 
-        $result = $this->postsService->updatePost($id, $postsService);
-        if ($result) {
-            return ResponseHelper::jsonResponse(200, 'PostUpdate Succesfully', $result);
+        if ($checkExist) {
+            $activity = $this->postsService->updatePost($postRequest);
+            return ResponseHelper::jsonResponse(200, 'OK', $activity);
         }
-        return ResponseHelper::jsonResponse(404, 'Post Not Found', null, null);
+        return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
     }
 
     public function delete($id)
