@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activities', function (Blueprint $table) {
+        Schema::table('form', function (Blueprint $table) {
             $table->softDeletes();
         });
     }

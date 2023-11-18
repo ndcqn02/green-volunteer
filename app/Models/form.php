@@ -2,31 +2,35 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Post extends Model
+
+
+class form extends Model
 {
     use Notifiable;
     use SoftDeletes;
+
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        "title",
         "body",
         "user_id",
-        "images",
-        "status"
+        "activity_id",
+        "status",
     ];
-    protected $table = 'posts';
+    protected $table = 'form';
 
-    public function User():HasOne{
-        return $this->hashOne(User::class);
+    public function form():HasOne{
+        return $this->hashOne(form::class);
     }
 }

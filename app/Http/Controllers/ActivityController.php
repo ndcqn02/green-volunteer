@@ -6,6 +6,8 @@ use App\Helpers\ResponseHelper;
 use Illuminate\Http\Request;
 use App\Services\ActivityService;
 use App\Http\Requests\Activity\CreateActivityRequest;
+use Illuminate\Http\JsonResponse;
+
 
 class ActivityController extends Controller
 {
@@ -15,11 +17,14 @@ class ActivityController extends Controller
     {
         $this->activityService = new ActivityService();
     }
-
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $activity = $this->activityService->getAll();
-        return ResponseHelper::jsonResponse(200, 'OK', $activity);
+        $page = $request->input('page', 1);
+        $pageSize = $request->input('pageSize', 10);
+        $filters = $request->input('status');
+        $posts = $this->activityService->getAll($page, $pageSize, $filters);
+        return ResponseHelper::jsonResponse(200, 'All Posts Show', $posts);
+
     }
 
     public function show($id)
