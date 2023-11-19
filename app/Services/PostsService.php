@@ -15,11 +15,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class PostsService
 {
 
-
-    public function getAllPosts($page = 1, $pageSize = 10, $status = null)
+    public function getAllPosts($page = 1, $pageSize = null, $status = null)
     {
         $query = Post::query();
-
+        $pageSize = $pageSize ?? $query->count();
         if ($status !== null) {
             $query->where('status', $status);
         }

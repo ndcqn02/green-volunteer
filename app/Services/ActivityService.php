@@ -37,10 +37,10 @@ class ActivityService
         return;
     }
 
-    public function getAll($page = 1, $pageSize = 10, $status = null)
+    public function getAll($page = 1, $pageSize = null, $status = null)
     {
         $query = Activity::query();
-
+        $pageSize = $pageSize ?? $query->count();
         if ($status !== null) {
             $query->where('status', $status);
         }
