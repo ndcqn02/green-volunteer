@@ -26,7 +26,7 @@ class AuthValidationRequest extends FormRequest
     public function failedValidation(Validator $vailator){
         throw new HttpResponseException(response([
             "data" => $vailator->errors(),
-            "status" => 400 
+            "status" => 400
         ])
         );
     }
