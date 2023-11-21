@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWTSubject
         "phone",
         "DOB",
         "school",
+        "google_id"
     ];
     protected $table = 'users';
     /**

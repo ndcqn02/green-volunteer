@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('auth')->group(function () {
     Route::post('register', [UserController::class,'register']);
     Route::post('login', [UserController::class,'login']);
+    Route::get('/google/redirect', [UserController::class,'redirectToAuth']);
+    Route::get('/google/callback/', [UserController::class, 'handleGoogleCallback']);
 });
 
 Route::prefix('user')->group(function () {
