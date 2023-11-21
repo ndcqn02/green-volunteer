@@ -13,10 +13,10 @@ use LDAP\Result;
 
 class FormService
 {
-    public function getAllforms($page = 1, $pageSize = 10, $status = null)
+    public function getAllforms($page = 1, $pageSize = null, $status = null)
     {
         $query = form::query();
-
+        $pageSize = $pageSize ?? $query->count();
         if ($status !== null) {
             $query->where('status', $status);
         }

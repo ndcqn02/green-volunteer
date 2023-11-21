@@ -19,11 +19,11 @@ class ActivityController extends Controller
     }
     public function index(Request $request): JsonResponse
     {
-        $page = $request->input('page', 1);
-        $pageSize = $request->input('pageSize', 10);
+        $page = $request->input('page');
+        $pageSize = $request->input('pageSize');
         $filters = $request->input('status');
         $posts = $this->activityService->getAll($page, $pageSize, $filters);
-        return ResponseHelper::jsonResponse(200, 'All Posts Show', $posts);
+        return ResponseHelper::jsonResponse(200, 'All Activity Show', $posts);
 
     }
 
