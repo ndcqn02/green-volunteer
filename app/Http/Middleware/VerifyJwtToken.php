@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\ResponseHelper;
 use Closure;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -21,24 +22,22 @@ class VerifyJwtToken
     {
         try {
             if (!JWTAuth::parseToken()->authenticate()) {
-                return response()->json(["message"=>'user_not_found',"data"=>null,"error"=>true]);
+                return ResponseHelper::jsonResponse(401,"ser_not_found",null,true);
             }
-
         } catch (TokenExpiredException $e) {
             $token = JWTAuth::parseToken()->refresh();
-            return response()->json(["message"=>'token_expired',"error"=> true,"data"=>$token]);
+            return ResponseHelper::jsonResponse(401,"token_expired",['token'=>$token],true);
 
         } catch (TokenInvalidException $e) {
 
-            return response()->json(["message"=>'token_invalid',"data"=>null,"error"=>true] );
-
+            return ResponseHelper::jsonResponse(401,"token_invalid",null,true);
         } catch (JWTException $e) {
 
-            return response()->json(['token_absent',"data"=>null,"error"=>true]);
+            return ResponseHelper::jsonResponse(401,"token_absent",null,true);
 
         }
         catch (JWTException $e) {
-            return response()->json(['message' => 'invalid token',"data"=>null,"error"=>true]);
+            return ResponseHelper::jsonResponse(401,"invalid_token",null,true);
         } 
         return $next($request);
     }
