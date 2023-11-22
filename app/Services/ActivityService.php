@@ -7,13 +7,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\JsonResponse;
-
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 class ActivityService
 {
 
-    public function create ($activity){
-        $result = Activity::create($activity ->all());
-        return $result;
+    public function createActivity(array $data, array $images)
+    {
+        // Validate the data as needed
+
+        // Create the activity
+        $activity = Activity::create($data);
+
+        // Upload and associate images
+        foreach ($images as $image) {
+            $uploadedImage = Cloudinary::upload($image->getRealPath())->getSecurePath();
+            $activity->images()->create(['image_url' => $uploadedImage]);
+        }
+
+        return $activity;
     }
 
     public function update ($activityData){

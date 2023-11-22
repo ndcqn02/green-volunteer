@@ -16,6 +16,9 @@ class Activity extends Model
      *
      * @var array<int, string>
      */
+    public function images() {
+        return $this->hasMany(Image::class);
+    }
     protected $fillable = [
         "title",
         "body",

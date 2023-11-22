@@ -7,66 +7,97 @@ use Illuminate\Http\Request;
 use App\Services\ActivityService;
 use App\Http\Requests\Activity\CreateActivityRequest;
 use Illuminate\Http\JsonResponse;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use App\Models\Activity;
 
 
 class ActivityController extends Controller
 {
-    protected $activityService;
 
-    public function __construct()
-    {
-        $this->activityService = new ActivityService();
+    public function create() {
+        return view('activities.create');
     }
-    public function index(Request $request): JsonResponse
-    {
-        $page = $request->input('page');
-        $pageSize = $request->input('pageSize');
-        $filters = $request->input('status');
-        $posts = $this->activityService->getAll($page, $pageSize, $filters);
-        return ResponseHelper::jsonResponse(200, 'All Activity Show', $posts);
-
-    }
-
-    public function show($id)
-    {
-        $activity = $this->activityService->getOne($id);
-        if ($activity) {
-            return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    public function store(CreateActivityRequest $request) {
+        $activity = Activity::create([
+            'title' => $request->input('title'),
+            'body' => $request->input('body'),
+            'timeStart' => $request->input('timeStart'),
+            'time_end' => $request->input('time_end'),
+            'num_vol' => $request->input('num_vol'),
+            'address' => $request->input('address'),
+            'status' => $request->input('status'),
+        ]);
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                $uploadedImage = Cloudinary::upload($image->getRealPath())->getSecurePath();
+                $activity->images()->create(['image_url' => $uploadedImage]);
+            }
         }
-        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
+
+        return redirect()->route('activities.create');
     }
 
-
-    public function create(CreateActivityRequest $request)
-    {
-        $activity = $this->activityService->create($request);
-        if ($activity) {
-            return ResponseHelper::jsonResponse(200, 'OK', $activity);
-        }
-        return ResponseHelper::jsonResponse('Bad Request', $activity, 400);
+    public function show(Activity $activity) {
+        $images = $activity->images;
+        return view('activities.show', compact('activity', 'images'));
     }
+    // protected $activityService;
+
+    // public function __construct()
+    // {
+    //     $this->activityService = new ActivityService();
+    // }
+    // public function index(Request $request): JsonResponse
+    // {
+    //     $page = $request->input('page');
+    //     $pageSize = $request->input('pageSize');
+    //     $filters = $request->input('status');
+    //     $posts = $this->activityService->getAll($page, $pageSize, $filters);
+    //     return ResponseHelper::jsonResponse(200, 'All Activity Show', $posts);
+
+    // }
+
+    // public function show($id)
+    // {
+    //     $activity = $this->activityService->getOne($id);
+    //     if ($activity) {
+    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    //     }
+    //     return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
+    // }
 
 
-    public function update(CreateActivityRequest $request)
-    {
-        $checkExist = $this->activityService->getOne($request->id);
+    // public function create(CreateActivityRequest $request)
+    // {
+    //     $activity = $this->activityService->create($request);
+    //     if ($activity) {
+    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    //     }
+    //     return ResponseHelper::jsonResponse('Bad Request', $activity, 400);
+    // }
 
-        if ($checkExist) {
-            $activity = $this->activityService->update($request);
-            return ResponseHelper::jsonResponse(200, 'OK', $activity);
-        }
-        return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
-    }
 
-    public function delete($id)
-    {
-        $checkExist = $this->activityService->getOne($id);
+    // public function update(CreateActivityRequest $request)
+    // {
+    //     $checkExist = $this->activityService->getOne($request->id);
 
-        if ($checkExist) {
-            $activity = $this->activityService->delete($id);
-            return ResponseHelper::jsonResponse(200, 'OK', $activity);
-        }
-        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
-    }
+    //     if ($checkExist) {
+    //         $activity = $this->activityService->update($request);
+    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    //     }
+    //     return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
+    // }
+
+    // public function delete($id)
+    // {
+    //     $checkExist = $this->activityService->getOne($id);
+
+    //     if ($checkExist) {
+    //         $activity = $this->activityService->delete($id);
+    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    //     }
+    //     return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
+    // }
 
 }

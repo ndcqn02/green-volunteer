@@ -29,6 +29,7 @@ class CreateActivityRequest extends FormRequest
             'num_vol' => 'required|integer',
             'address' => 'required|string|max:255',
             'status' => 'required|string|max:255',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
 }

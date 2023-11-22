@@ -29,14 +29,19 @@ Route::prefix('user')->group(function () {
     Route::put("/updateUser",[UserController::class,"updateUser"]);
 });
 
-Route::prefix('activities')->group(function () {
-    Route::post('/', [ActivityController::class,'create']);
-    Route::put('/', [ActivityController::class,'update']);
-    Route::delete('/{id}', [ActivityController::class,'delete']);
-    Route::get('/',[ActivityController::class,'index']);
-    Route::get('/{status}', [ActivityController::class,'index']);
-    Route::get('getId/{id}', [ActivityController::class,'show']);
-});
+// Route::prefix('activities')->group(function () {
+//     Route::post('/', [ActivityController::class,'create']);
+//     Route::put('/', [ActivityController::class,'update']);
+//     Route::delete('/{id}', [ActivityController::class,'delete']);
+//     Route::get('/',[ActivityController::class,'index']);
+//     Route::get('/{status}', [ActivityController::class,'index']);
+//     Route::get('getId/{id}', [ActivityController::class,'show']);
+// });
+Route::get('/activities/create', [ActivityController::class, 'create'])->name('activities.create');
+Route::post('/activities', [ActivityController::class, 'store'])->name('activities.store');
+Route::get('/activities/{activity}', [ActivityController::class, 'show'])->name('activities.show');
+
+
 Route::prefix('posts')->group(function () {
     Route::get('/',[PostController::class,'index']);
     Route::get('/{status}', [PostController::class,'index']);
