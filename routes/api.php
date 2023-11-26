@@ -31,12 +31,10 @@ Route::prefix('user')->group(function () {
 
 Route::prefix('activities')->group(function () {
     Route::get('/', [ActivityController::class, 'index'])->name('activities.index');
-    Route::get('/create', [ActivityController::class, 'create'])->name('activities.create');
     Route::post('/', [ActivityController::class, 'store'])->name('activities.store');
     Route::get('/{activity}', [ActivityController::class, 'show'])->name('activities.show');
     Route::put('/{activity}', [ActivityController::class, 'update'])->name('activities.update');
     Route::delete('/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
-    Route::get('/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
 
 
 });

@@ -22,7 +22,6 @@ class ActivityController extends Controller
     {
         $this->activityService = $activityService;
     }
-    // Show All
     public function index(Request $request)
     {
         $page = $request->input('page');
@@ -30,17 +29,15 @@ class ActivityController extends Controller
         $status = $request->input('status');
         $address = $request->input('address');
 
-        $activities = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+        if ($activity) {
+            return ResponseHelper::jsonResponse(200, 'Show Activities ', $activity);
+        }
+        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
+    }
 
-        return view('activities.index', compact('activities'));
-    }
-    // Show Create
-    public function create() {
-        return view('activities.create');
-    }
     public function store(Request $request)
     {
-
         $activityData = [
             'title' => $request->input('title'),
             'body' => $request->input('body'),
@@ -54,7 +51,6 @@ class ActivityController extends Controller
         $activity = $this->activityService->createActivity($activityData, $images);
         return ResponseHelper::jsonResponse(200, 'OK', $activity);
     }
-    // Get One
     public function show($id) {
         $activity = $this->activityService->getOne($id);
         if ($activity) {
@@ -62,28 +58,19 @@ class ActivityController extends Controller
         }
         return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
     }
-    // Update
-    // public function update(CreateActivityRequest $request, Activity $activity)
-    // {
 
-    //     $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
-    //     return ResponseHelper::jsonResponse(200, 'Update Successfully', $updatedActivity);
-    // }
-    public function update(Request $request, Activity $activity)
+    public function update(CreateActivityRequest $request, Activity $activity)
     {
-        $updatedActivity = $this->activityService->updateActivityWithImages($activity, $request->all());
-
-        return redirect()->route('activities.show', $updatedActivity)->with('success', 'Activity updated successfully.');
+        $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
+        return ResponseHelper::jsonResponse(200, 'Update Successfully', $activity);
     }
-    public function edit(Activity $activity)
-    {
-        return view('activities.edit', compact('activity'));
-    }
-    // Delete
     public function destroy(Activity $activity)
     {
         $activity = $this->activityService->deleteActivity($activity);
-        return ResponseHelper::jsonResponse(200, 'Delete Successfully', $activity);
+        if ($activity) {
+            return ResponseHelper::jsonResponse(200, 'Delete Successfully', $activity);
+        }
+        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
     }
 
 }
