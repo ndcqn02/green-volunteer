@@ -1,4 +1,4 @@
-<!-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <h1>Activities</h1>
@@ -49,7 +49,7 @@
                     </td>
                     <td>
                         <a href="{{ route('activities.show', $activity) }}" class="btn btn-info">View</a>
-                        <a href="{{ route('activities.edit', $activity) }}" class="btn btn-primary">Edit</a>
+                        <a href="{{ route('activities.update', $activity) }}" class="btn btn-primary">Edit</a>
                         <form action="{{ route('activities.destroy', $activity) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
@@ -62,4 +62,4 @@
     </table>
 
     {{ $activities->appends(request()->except('page'))->links() }}
-@endsection -->
+@endsection

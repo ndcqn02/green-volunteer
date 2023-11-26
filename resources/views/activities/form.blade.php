@@ -1,4 +1,4 @@
-<!-- resources/views/activities/form.blade.php
+resources/views/activities/form.blade.php
 
 @extends('layouts.app')
 
@@ -17,4 +17,4 @@
             <input type="text" name="title" value="{{ old('title', isset($activity) ? $activity->title : '') }}" required>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
-@endsection -->
+@endsection

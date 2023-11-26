@@ -30,9 +30,9 @@ class ActivityController extends Controller
         $status = $request->input('status');
         $address = $request->input('address');
 
-        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+        $activities = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
 
-        return ResponseHelper::jsonResponse(200, 'OK', $activity);
+        return view('activities.index', compact('activities'));
     }
     // Show Create
     public function create() {

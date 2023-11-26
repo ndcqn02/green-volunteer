@@ -1,4 +1,4 @@
-<!-- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
     <h1>Activity Details</h1>
@@ -23,4 +23,4 @@
 
 
     <a href="{{ route('activities.index') }}" class="btn btn-secondary">Back to Activities</a>
-@endsection -->
+@endsection
