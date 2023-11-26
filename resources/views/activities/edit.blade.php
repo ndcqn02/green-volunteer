@@ -5,7 +5,7 @@
 @section('content')
     <h1>Edit Activity</h1>
 
-    <form action="{{ route('activities.update', $activity) }}" method="POST">
+    <form action="{{ route('activities.update', $activity) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf
 
@@ -45,12 +45,16 @@
         </div>
 
         <div class="form-group">
-            <label for="images">Images:</label>
+            <label for="images">Existing Images:</label>
             @foreach ($activity->images as $index => $image)
                 <input type="hidden" name="images[{{ $index }}][id]" value="{{ $image->id }}">
                 <input type="text" name="images[{{ $index }}][image_url]" class="form-control" placeholder="Image URL {{ $index + 1 }}" value="{{ old("images.$index.image_url", $image->image_url) }}">
             @endforeach
-            <!-- Add more input fields for additional images -->
+        </div>
+
+        <div class="form-group">
+            <label for="new_images">New Images:</label>
+            <input type="file" name="new_images[]" class="form-control-file" multiple>
         </div>
 
         <button type="submit" class="btn btn-primary">Update</button>
