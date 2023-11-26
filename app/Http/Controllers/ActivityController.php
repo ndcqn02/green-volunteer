@@ -67,14 +67,12 @@ class ActivityController extends Controller
     {
 
         $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
-
         return ResponseHelper::jsonResponse(200, 'Delete Successfully', $updatedActivity);
     }
     // Delete
     public function destroy(Activity $activity)
     {
         $activity = $this->activityService->deleteActivity($activity);
-
         return ResponseHelper::jsonResponse(200, 'Delete Successfully', $activity);
     }
 
