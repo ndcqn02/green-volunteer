@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Services\ActivityService;
 use App\Http\Requests\Activity\CreateActivityRequest;
@@ -14,11 +15,33 @@ use App\Models\Activity;
 class ActivityController extends Controller
 {
 
+
+    protected $activityService;
+
+    public function __construct(ActivityService $activityService)
+    {
+        $this->activityService = $activityService;
+    }
+    // Show All
+    public function index(Request $request)
+    {
+        $page = $request->input('page');
+        $pageSize = $request->input('pageSize');
+        $status = $request->input('status');
+        $address = $request->input('address');
+
+        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+
+        return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    }
+    // Show Create
     public function create() {
         return view('activities.create');
     }
-    public function store(CreateActivityRequest $request) {
-        $activity = Activity::create([
+    public function store(Request $request)
+    {
+
+        $activityData = [
             'title' => $request->input('title'),
             'body' => $request->input('body'),
             'timeStart' => $request->input('timeStart'),
@@ -26,78 +49,33 @@ class ActivityController extends Controller
             'num_vol' => $request->input('num_vol'),
             'address' => $request->input('address'),
             'status' => $request->input('status'),
-        ]);
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                $uploadedImage = Cloudinary::upload($image->getRealPath())->getSecurePath();
-                $activity->images()->create(['image_url' => $uploadedImage]);
-            }
+        ];
+        $images = $request->file('images');
+        $activity = $this->activityService->createActivity($activityData, $images);
+        return ResponseHelper::jsonResponse(200, 'OK', $activity);
+    }
+    // Get One
+    public function show($id) {
+        $activity = $this->activityService->getOne($id);
+        if ($activity) {
+            return ResponseHelper::jsonResponse(200, 'OK', $activity);
         }
-
-        return redirect()->route('activities.create');
+        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
     }
+    // Update
+    public function update(CreateActivityRequest $request, Activity $activity)
+    {
 
-    public function show(Activity $activity) {
-        $images = $activity->images;
-        return view('activities.show', compact('activity', 'images'));
+        $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
+
+        return ResponseHelper::jsonResponse(200, 'Delete Successfully', $updatedActivity);
     }
-    // protected $activityService;
+    // Delete
+    public function destroy(Activity $activity)
+    {
+        $activity = $this->activityService->deleteActivity($activity);
 
-    // public function __construct()
-    // {
-    //     $this->activityService = new ActivityService();
-    // }
-    // public function index(Request $request): JsonResponse
-    // {
-    //     $page = $request->input('page');
-    //     $pageSize = $request->input('pageSize');
-    //     $filters = $request->input('status');
-    //     $posts = $this->activityService->getAll($page, $pageSize, $filters);
-    //     return ResponseHelper::jsonResponse(200, 'All Activity Show', $posts);
-
-    // }
-
-    // public function show($id)
-    // {
-    //     $activity = $this->activityService->getOne($id);
-    //     if ($activity) {
-    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
-    //     }
-    //     return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
-    // }
-
-
-    // public function create(CreateActivityRequest $request)
-    // {
-    //     $activity = $this->activityService->create($request);
-    //     if ($activity) {
-    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
-    //     }
-    //     return ResponseHelper::jsonResponse('Bad Request', $activity, 400);
-    // }
-
-
-    // public function update(CreateActivityRequest $request)
-    // {
-    //     $checkExist = $this->activityService->getOne($request->id);
-
-    //     if ($checkExist) {
-    //         $activity = $this->activityService->update($request);
-    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
-    //     }
-    //     return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
-    // }
-
-    // public function delete($id)
-    // {
-    //     $checkExist = $this->activityService->getOne($id);
-
-    //     if ($checkExist) {
-    //         $activity = $this->activityService->delete($id);
-    //         return ResponseHelper::jsonResponse(200, 'OK', $activity);
-    //     }
-    //     return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
-    // }
+        return ResponseHelper::jsonResponse(200, 'Delete Successfully', $activity);
+    }
 
 }
