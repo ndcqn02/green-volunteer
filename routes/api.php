@@ -34,7 +34,7 @@ Route::prefix('activities')->group(function () {
     Route::post('/', [ActivityController::class, 'store'])->name('activities.store');
     Route::get('/{activity}', [ActivityController::class, 'show'])->name('activities.show');
     Route::put('/{activity}', [ActivityController::class, 'update'])->name('activities.update');
-    Route::delete('/{activity}', [ActivityController::class, 'destroy'])->name('activities.destroy');
+    Route::delete('/{activity}', [ActivityController::class, 'delete'])->name('activities.destroy');
 
 
 });
