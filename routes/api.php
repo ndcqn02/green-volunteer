@@ -22,7 +22,9 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [UserController::class,'register']);
     Route::post('login', [UserController::class,'login']);
     Route::get('/google/redirect', [UserController::class,'redirectToAuth']);
+    Route::get('/facebook/redirect', [UserController::class,'redirectToFacebook']);
     Route::get('/google/callback/', [UserController::class, 'handleGoogleCallback']);
+    Route::get('/facebook/callback/', [UserController::class, 'handleFacebookCallback']);
 });
 
 Route::prefix('user')->group(function () {

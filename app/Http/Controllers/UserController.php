@@ -47,12 +47,26 @@ class UserController extends Controller
     {
         return Socialite::driver('google')->redirect();
     }
+    public function redirectToFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
     public function handleGoogleCallback()
     {
         try {
             $user = Socialite::driver('google')->user();
             $response = $this->service->handleGoogleCallback($user);
             return ResponseHelper::jsonResponse(200, "login success", $response, false);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+    }
+    public function handleFacebookCallback()
+    {
+        try {
+            $user = Socialite::driver('facebook')->user();
+            dd($user);
+            return $user;
         } catch (\Throwable $th) {
             dd($th);
         }
