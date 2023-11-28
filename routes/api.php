@@ -39,6 +39,7 @@ Route::prefix('activities')->group(function () {
     Route::get('/{status}', [ActivityController::class,'index'])->middleware("jwt_auth");
     Route::get('getId/{id}', [ActivityController::class,'show'])->middleware("jwt_auth");
 });
+
 Route::prefix('posts')->group(function () {
     Route::get('/',[PostController::class,'index']);
     Route::get('/{status}', [PostController::class,'index'])->middleware("jwt_auth");
