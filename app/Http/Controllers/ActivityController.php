@@ -26,10 +26,12 @@ class ActivityController extends Controller
     {
         $page = $request->input('page');
         $pageSize = $request->input('pageSize');
+        $title = $request->input('title');
         $status = $request->input('status');
         $address = $request->input('address');
 
-        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+
+        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $title, $status, $address);
         if ($activity) {
             return ResponseHelper::jsonResponse(200, 'Show Activities ', $activity);
         }

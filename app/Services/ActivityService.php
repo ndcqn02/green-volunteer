@@ -25,10 +25,13 @@ class ActivityService
         $this->associateImages($activity, $images);
         return $activity;
     }
-    public function getPaginatedActivities($pageSize = null, $page = null, $status = null, $address = null )
+    public function getPaginatedActivities($pageSize = null, $page = null, $title = null, $status = null, $address = null )
     {
         $query = Activity::with('images');
         $pageSize = $pageSize ?? $query->count();
+        if ($title !== null) {
+            $query->where('title', $title);
+        }
         if ($address !== null) {
             $query->where('address', $address);
         }
