@@ -26,10 +26,12 @@ class ActivityController extends Controller
     {
         $page = $request->input('page');
         $pageSize = $request->input('pageSize');
+        $title = $request->input('title');
         $status = $request->input('status');
         $address = $request->input('address');
 
-        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $status, $address);
+
+        $activity = $this->activityService->getPaginatedActivities($pageSize, $page, $title, $status, $address);
         if ($activity) {
             return ResponseHelper::jsonResponse(200, 'Show Activities ', $activity);
         }
@@ -64,7 +66,7 @@ class ActivityController extends Controller
         $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
         return ResponseHelper::jsonResponse(200, 'Update Successfully', $activity);
     }
-    public function destroy(Activity $activity)
+    public function delete(Activity $activity)
     {
         $activity = $this->activityService->deleteActivity($activity);
         if ($activity) {
