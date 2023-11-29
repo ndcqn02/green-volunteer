@@ -32,8 +32,13 @@ Route::prefix('user')->group(function () {
 });
 
 Route::prefix('activities')->group(function () {
+<<<<<<< HEAD
     Route::post('/', [ActivityController::class,'create'])->middleware("jwt_auth");
     Route::put('/{id}', [ActivityController::class,'update'])->middleware("jwt_auth");
+=======
+    Route::post('/', [ActivityController::class,'store'])->middleware("jwt_auth");
+    Route::put('/', [ActivityController::class,'update'])->middleware("jwt_auth");
+>>>>>>> ba2d1af09918c0b67f47f8a1477ded95ad514713
     Route::delete('/{id}', [ActivityController::class,'delete'])->middleware("jwt_auth");
     Route::get('/',[ActivityController::class,'index']);
     Route::get('/{status}', [ActivityController::class,'index'])->middleware("jwt_auth");
