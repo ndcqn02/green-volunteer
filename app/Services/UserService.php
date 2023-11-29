@@ -54,7 +54,7 @@ class UserService
             ];
             $token = JWTAuth::claims($customClaims)->fromUser(auth()->user());
             return [
-                "user" => $data,
+                "user_id" => auth()->user()->id,
                 "token" => $token
             ];
         } else {
