@@ -54,7 +54,7 @@ class UserService
             ];
             $token = JWTAuth::claims($customClaims)->fromUser(auth()->user());
             return [
-                "user" => $data,
+                "user_id" => auth()->user()->id,
                 "token" => $token
             ];
         } else {
@@ -99,7 +99,7 @@ class UserService
                 ];
                 $token = JWTAuth::claims($customClaims)->fromUser($new_user);
                 return [
-                    "user" => $new_user,
+                    "user_id" => $new_user->id,
                     "token" => $token
                 ];
             } catch (\Throwable $th) {
@@ -112,7 +112,7 @@ class UserService
             ];
             $token = JWTAuth::claims($customClaims)->fromUser($findUser);
             return [
-                "user" => $findUser,
+                "user_id" => $findUser->id,
                 "token" => $token
             ];
         }
