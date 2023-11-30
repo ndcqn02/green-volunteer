@@ -10,11 +10,26 @@ use Illuminate\Support\Facades\Validator;
 use App\Helpers\ResponseHelper;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use LDAP\Result;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PostsService
 {
 
+    public function createPost(array $data, $thumbnailImage, $detailsImage)
+    {
+        $data['thumbnail_image'] = $this->uploadImage($thumbnailImage, 'thumbnails');
+        $data['details_image'] = $this->uploadImage($detailsImage, 'details');
+        $post = Post::create($data);
+        return $post;
+    }
+    private function uploadImage($file, $folder)
+    {
+        $cloudinaryUpload = Cloudinary::upload($file->getRealPath(), [
+            'folder' => $folder,
+        ]);
+        return $cloudinaryUpload->getSecurePath();
+    }
     public function getAllPosts($page = 1, $pageSize = null, $status = null)
     {
         $query = Post::query();
@@ -34,11 +49,6 @@ class PostsService
         return false;
     }
 
-    public function createPost($data)
-    {
-        $result = Post::create($data ->all());
-        return $result;
-    }
 
     public function updatePost($data)
     {

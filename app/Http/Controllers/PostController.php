@@ -44,13 +44,21 @@ class PostController extends Controller
 
     public function create(PostRequest $postRequest)
     {
-        $post = $this->postsService->createPost($postRequest);
+
+        $thumbnailImage = $postRequest->file('thumbnail_image');
+        $detailsImage = $postRequest->file('details_image');
+
+        $postData = [
+            'title' => $postRequest->input('title'),
+            'body' => $postRequest->input('body'),
+            'user_id' => $postRequest->input('user_id'),
+            'status' => $postRequest->input('status'),
+        ];
+        $post = $this->postsService->createPost($postData, $thumbnailImage, $detailsImage);
         if ($post) {
             return ResponseHelper::jsonResponse(200, 'OK', $post);
         }
-        return ResponseHelper::jsonResponse('Bad Request', $post, 400);
-
-
+        return ResponseHelper::jsonResponse(400, 'Bad Request', null, 'Not Found');
     }
     public function update(PostRequest $postRequest)
     {
