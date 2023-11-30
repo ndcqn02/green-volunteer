@@ -28,7 +28,8 @@ class PostRequest extends FormRequest
                 'body' => 'required',
                 'user_id' => 'required',
                 'status' => 'required|max:255',
-                'images' => 'nullable|max:255',
+                'thumbnail_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'details_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ];
     }
 }
