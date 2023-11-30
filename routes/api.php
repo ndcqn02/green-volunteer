@@ -37,13 +37,13 @@ Route::prefix('activities')->group(function () {
     Route::delete('/{id}', [ActivityController::class,'delete'])->middleware("jwt_auth");
     Route::get('/',[ActivityController::class,'index']);
     Route::get('/{status}', [ActivityController::class,'index'])->middleware("jwt_auth");
-    Route::get('getId/{id}', [ActivityController::class,'show'])->middleware("jwt_auth");
+    Route::get('getId/{id}', [ActivityController::class,'show']);
 });
 
 Route::prefix('posts')->group(function () {
     Route::get('/',[PostController::class,'index']);
     Route::get('/{status}', [PostController::class,'index'])->middleware("jwt_auth");
-    Route::get('getId/{id}', [PostController::class,'show'])->middleware("jwt_auth");
+    Route::get('getId/{id}', [PostController::class,'show']);
     Route::post('/', [PostController::class,'create'])->middleware("jwt_auth");
     Route::put('/', [PostController::class,'update'])->middleware("jwt_auth");
     Route::delete('/{id}', [PostController::class,'delete'])->middleware("jwt_auth");
@@ -52,7 +52,7 @@ Route::prefix('posts')->group(function () {
 Route::prefix('forms')->group(function () {
     Route::get('/',[FormsController::class,'index']);
     Route::get('/{status}', [FormsController::class,'index'])->middleware("jwt_auth");
-    Route::get('getId/{id}', [FormsController::class,'show'])->middleware("jwt_auth");
+    Route::get('getId/{id}', [FormsController::class,'show']);
     Route::post('/', [FormsController::class,'create'])->middleware("jwt_auth");
     Route::put('/', [FormsController::class,'update'])->middleware("jwt_auth");
     Route::delete('/{id}', [FormsController::class,'delete'])->middleware("jwt_auth");
