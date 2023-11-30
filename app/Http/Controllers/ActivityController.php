@@ -67,9 +67,10 @@ class ActivityController extends Controller
         $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
         return ResponseHelper::jsonResponse(200, 'Update Successfully', $activity);
     }
-    public function delete(Activity $activity)
+
+    public function delete($id)
     {
-        $activity = $this->activityService->deleteActivity($activity);
+        $activity = $this->activityService->deleteActivity($id);
         if ($activity) {
             return ResponseHelper::jsonResponse(200, 'Delete Successfully', $activity);
         }

@@ -56,11 +56,11 @@ class ActivityService
         return $activity;
     }
 
-    public function deleteActivity(Activity $activity)
+    public function deleteActivity($id)
     {
-        $activityId = Activity::find($activity);
+        $activity = Activity::find($id);
 
-        if ($activityId) {
+        if ($activity) {
             $activity->images()->delete();
             $activity->delete();
             return $activity;
