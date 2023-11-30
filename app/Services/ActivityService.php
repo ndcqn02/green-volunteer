@@ -8,24 +8,22 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\JsonResponse;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
-
+use Illuminate\Validation\Rules\ImageFile;
 
 class ActivityService
 {
-    protected function associateImages(Activity $activity, array $images)
+    public function createActivity(array $data, $images)
     {
+
+        $activity = Activity::create($data);
         foreach ($images as $image) {
             $uploadedImage = Cloudinary::upload($image->getRealPath())->getSecurePath();
-            $activity->images()->create(['image_url' => $uploadedImage]);
+            $activity->images()->create(['image_url' => $uploadedImage, 'activity_id' => $activity->id]);
         }
-    }
-    public function createActivity(array $data, array $images)
-    {
-        $activity = Activity::create($data);
-        $this->associateImages($activity, $images);
         return $activity;
     }
-    public function getPaginatedActivities($pageSize = null, $page = null, $title = null, $status = null, $address = null )
+
+    public function getPaginatedActivities($pageSize = null, $page = null, $title = null, $status = null, $address = null)
     {
         $query = Activity::with('images');
         $pageSize = $pageSize ?? $query->count();
@@ -70,7 +68,8 @@ class ActivityService
         return false;
     }
 
-    public function getOne ($id){
+    public function getOne($id)
+    {
         return Activity::with('images')->find($id);
     }
 

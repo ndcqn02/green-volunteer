@@ -53,7 +53,8 @@ class ActivityController extends Controller
         $activity = $this->activityService->createActivity($activityData, $images);
         return ResponseHelper::jsonResponse(200, 'OK', $activity);
     }
-    public function show($id) {
+    public function show($id)
+    {
         $activity = $this->activityService->getOne($id);
         if ($activity) {
             return ResponseHelper::jsonResponse(200, 'OK', $activity);
