@@ -58,3 +58,7 @@ Route::prefix('forms')->group(function () {
     Route::delete('/{id}', [FormsController::class,'delete'])->middleware("jwt_auth");
 
 });
+
+Route::prefix("vnpay")->group(function () {
+    Route::post("/",[VnPayController::class,"vnpay"]);
+});
