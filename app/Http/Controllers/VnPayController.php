@@ -21,7 +21,7 @@ class VnPayController extends Controller
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount,
+            "vnp_Amount" => $vnp_Amount*100,
             "vnp_Command" => "pay",
             "vnp_CreateDate" => $startTime,
             "vnp_CurrCode" => "VND",
