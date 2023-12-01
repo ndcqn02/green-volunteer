@@ -12,7 +12,7 @@ class VnPayController extends Controller
         $vnp_TmnCode = "3PUBDH5H"; //Mã định danh merchant kết nối (Terminal Id)
         $vnp_HashSecret = "XARITWHLNFXHVXZNGYQSMDHEGGITEHVC"; //Secret key
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://127.0.0.1:8000";
+        $vnp_Returnurl = "https://green-volunteer-ui-git-dev-ndcqn02.vercel.app";
         $vnp_TxnRef = rand(1, 10000); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $request->input("order_desc");
         $vnp_Amount = $request->input('amount');
