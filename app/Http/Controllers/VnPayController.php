@@ -15,13 +15,13 @@ class VnPayController extends Controller
         $vnp_Returnurl = "http://127.0.0.1:8000";
         $vnp_TxnRef = rand(1, 10000); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $request->input("order_desc");
-        $vnp_Amount = $request->input('amount') * 100;
+        $vnp_Amount = $request->input('amount');
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
         $startTime = date("YmdHis");
         $inputData = array(
             "vnp_Version" => "2.1.0",
             "vnp_TmnCode" => $vnp_TmnCode,
-            "vnp_Amount" => $vnp_Amount * 100,
+            "vnp_Amount" => $vnp_Amount,
             "vnp_Command" => "pay",
             "vnp_CreateDate" => $startTime,
             "vnp_CurrCode" => "VND",
