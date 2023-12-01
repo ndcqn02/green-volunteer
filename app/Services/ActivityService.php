@@ -39,21 +39,15 @@ class ActivityService
         return $query->paginate($pageSize, ['*'], 'page', $page);
     }
 
-    public function updateActivity(Activity $activity, array $data)
+    public function updateActivity($data)
     {
-        $activity->update($data);
-        if (isset($data['images'])) {
-            foreach ($data['images'] as $imageData) {
-                $image = $activity->images()->find($imageData['id']);
-                if ($image) {
-                    $image->update(['image_url' => $imageData['image_url']]);
-                } else {
-                    $activity->images()->create(['image_url' => $imageData['image_url']]);
-                }
-            }
-        }
+        $activities = Activity::findOrFail($data['id']);
 
-        return $activity;
+        if ($activities) {
+            $result = $activities->update($data->All());
+            return $result;
+        }
+        return false;
     }
 
     public function deleteActivity($id)

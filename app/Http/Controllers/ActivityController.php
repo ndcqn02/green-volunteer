@@ -62,10 +62,15 @@ class ActivityController extends Controller
         return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
     }
 
-    public function update(CreateActivityRequest $request, Activity $activity)
+    public function update(CreateActivityRequest $request)
     {
-        $updatedActivity = $this->activityService->updateActivity($activity, $request->all());
-        return ResponseHelper::jsonResponse(200, 'Update Successfully', $activity);
+        $checkExist = $this->activityService->getOne($request->id);
+        if($checkExist){
+            $updatedActivity = $this->activityService->updateActivity($request);
+            return ResponseHelper::jsonResponse(200, 'Update Successfully', $updatedActivity);
+        }
+        return ResponseHelper::jsonResponse(404, 'Not Found', null, 'Not Found');
+
     }
 
     public function delete($id)
